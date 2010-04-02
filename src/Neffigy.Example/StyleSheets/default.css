@@ -1,0 +1,22 @@
+﻿body
+{
+    font-family: Georgia;
+}
+
+h2 
+{
+    font-size: 110%;
+}
+
+h3
+{
+    color: #336699;
+    font-size: 104%;
+    margin-bottom: 2px;
+}
+
+.comment p
+{
+    margin-top: 2px;
+    margin-bottom: 2px;
+}
