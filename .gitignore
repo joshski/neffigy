@@ -1,5 +1,6 @@
 obj
 bin
+Bin
 deploy
 deploy/*
 _ReSharper.*
@@ -9,3 +10,4 @@ _ReSharper.*
 *.suo
 *.cache
 ~$*
+Visual Studio 2008
