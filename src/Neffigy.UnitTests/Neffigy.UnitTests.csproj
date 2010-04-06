@@ -57,6 +57,7 @@
     <Compile Include="Dsl\DslWithMasterTests.cs" />
     <Compile Include="ManifestResource.cs" />
     <Compile Include="StubXElementLoader.cs" />
+    <Compile Include="TransformationTests.cs" />
     <Compile Include="Xml\XContainerExtensionsTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="XElementMergerTests.cs" />

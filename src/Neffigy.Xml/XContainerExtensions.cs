@@ -19,7 +19,8 @@ namespace Neffigy.Xml
             {
                 return SelectWithRootNamespace(container, document.Root.Name.NamespaceName, traversals);
             }
-            return container.XPathSelectElements(traversals.ToXPath(null)).ToArray();
+            var xPath = traversals.ToXPath(null);
+            return container.XPathSelectElements(xPath).ToArray();
         }
 
         static IEnumerable<XElement> SelectWithRootNamespace(XNode container, string namespaceName, IEnumerable<Traversal> traversals)

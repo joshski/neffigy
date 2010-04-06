@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
@@ -11,9 +13,8 @@ namespace Neffigy.UnitTests.Dsl
         protected override void Transform()
         {
             Text("p.body", "q");
-            ReplaceEach("p.z", new[] { "a", "b" }, footer =>
-                                                   Text("a", "k")
-                );
+            ReplaceAll("p.z", new[] { "a", "b" }, footer =>
+                                                  Text("a", "k"));
             Remove("#logo");
             Attr(".pageTitle", "class", "somethingElse");
         }

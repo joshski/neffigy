@@ -5,7 +5,7 @@ namespace Neffigy.Mvc
 {
     public abstract class NeffigyView<TMaster> : NeffigyDsl<TMaster>, IView where TMaster : NeffigyDsl, new()
     {
-        protected NeffigyView() : this(new OverwriteIdsMerger())
+        protected NeffigyView() : this(new IdMatchingXElementMerger())
         {
         }
 

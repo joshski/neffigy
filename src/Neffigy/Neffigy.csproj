@@ -35,15 +35,21 @@
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.Data" />
     <Reference Include="System.XML" />
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Element.cs" />
     <Compile Include="NeffigyDsl.cs" />
-    <Compile Include="OverwriteIdsMerger.cs" />
+    <Compile Include="IdMatchingXElementMerger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="WrappedSetExtensions.cs" />
+    <Compile Include="XElementAdapter.cs" />
+    <Compile Include="Transformation.cs" />
+    <Compile Include="WrappedSet.cs" />
     <Compile Include="XElementLoader.cs" />
     <Compile Include="XElementMerger.cs" />
   </ItemGroup>

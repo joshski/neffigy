@@ -1,10 +1,8 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml;
 using System.Xml.Linq;
-using Neffigy.Xml;
 
 namespace Neffigy
 {
@@ -18,16 +16,16 @@ namespace Neffigy
             this.merger = merger;
         }
 
-        protected NeffigyDsl() : this(new OverwriteIdsMerger())
+        protected NeffigyDsl() : this(new IdMatchingXElementMerger())
         {
         }
 
         protected internal override XElement LoadViewAsXElement(XElementLoader loader, string path, Func<string, string> mapPath)
         {
             var masterPath = PathToHtmlFileForType(master.GetType());
-            master.SourceElement = master.LoadViewAsXElement(loader, masterPath, mapPath);
+            master.RootElement = new XElementAdapter(master.LoadViewAsXElement(loader, masterPath, mapPath));
             var baseElement = base.LoadViewAsXElement(loader, path, mapPath);
-            return merger.Merge(master.SourceElement, baseElement);
+            return merger.Merge(master.RootElement.XElement, baseElement);
         }
 
         protected internal override void InvokeTransform()
@@ -37,11 +35,11 @@ namespace Neffigy
         }
     }
 
-    public abstract class NeffigyDsl
+    public abstract class NeffigyDsl : Transformation
     {
-        protected abstract void Transform();
+        protected internal XElementAdapter RootElement { get; set; }
 
-        protected internal XElement SourceElement { get; set; }
+        protected abstract override void Transform();
 
         protected virtual string PathToHtmlFile
         {
@@ -52,17 +50,17 @@ namespace Neffigy
 
         public void Render(TextWriter textWriter, Func<string, string> mapPath, XElementLoader loader)
         {
+            RootElement = new XElementAdapter(LoadViewAsXElement(loader, PathToHtmlFile, mapPath));
+            InvokeTransform();
             using (var xmlWriter = CreateXmlWriter(textWriter))
             {
-                SourceElement = LoadViewAsXElement(loader, PathToHtmlFile, mapPath);
-                InvokeTransform();
-                SourceElement.WriteTo(xmlWriter);
+                RootElement.WriteTo(xmlWriter);
             }
         }
 
         protected internal virtual void InvokeTransform()
         {
-            Transform();
+            Transform(new WrappedSet(RootElement));
         }
 
         protected internal virtual XElement LoadViewAsXElement(XElementLoader loader, string path, Func<string, string> mapPath)
@@ -78,62 +76,6 @@ namespace Neffigy
         static XmlWriter CreateXmlWriter(TextWriter writer)
         {
             return XmlWriter.Create(writer);
-        }
-
-        protected void Remove(string selector)
-        {
-            var elements = Css(selector);
-            foreach (var element in elements)
-            {
-                element.Remove();
-            }
-        }
-
-        protected void Attr(string selector, string key, object value)
-        {
-            var elements = Css(selector);
-            foreach (var element in elements)
-            {
-                element.SetAttributeValue(key, value);
-            }
-        }
-
-        protected void ReplaceEach<T>(string selector, IEnumerable<T> enumerable, Action<T> action)
-        {
-            var originalSource = SourceElement;
-            var selectedElements = SourceElement.Css(selector);
-            foreach (var selectedElement in selectedElements)
-            {
-                ReplaceSelectedElement(selectedElement, enumerable, action);
-            }
-            SourceElement = originalSource;
-        }
-
-        private void ReplaceSelectedElement<T>(XElement selectedElement, IEnumerable<T> enumerable, Action<T> action)
-        {
-            var element = selectedElement;
-            foreach (var item in enumerable)
-            {
-                SourceElement = new XElement(selectedElement);
-                action(item);
-                element.AddAfterSelf("\n", SourceElement);
-                element = SourceElement;
-            }
-            selectedElement.Remove();
-        }
-
-        protected void Text(string selector, object text)
-        {
-            var elements = SourceElement.Css(selector);
-            foreach (var element in elements)
-            {
-                element.ReplaceNodes(text);
-            }
-        }
-
-        protected IEnumerable<XElement> Css(string selector)
-        {
-            return SourceElement.Css(selector).ToArray();
         }
     }
 }

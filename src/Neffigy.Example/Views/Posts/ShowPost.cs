@@ -18,14 +18,11 @@ namespace Neffigy.Example.Views.Posts
             Text("#main h2", post.Title);
             Text("title", post.Title);
             Text("p.body", post.Body);
-            Remove(".comments:gt(0)");
-            ReplaceEach(".comment", post.Comments,
-                comment => {
-                  Text("h3", comment.Title);
-                  Text("p", comment.Summary);
-                  Attr("a", "href", comment.RelativeUrl());    
-                }
-            );
+            ReplaceAll(".comment", post.Comments, comment => {
+                                                                 Text("h3", comment.Title);
+                                                                 Text("p", comment.Summary);
+                                                                 Attr("a", "href", comment.RelativeUrl());    
+            });
             if (post.Comments.Any()) {
                 Remove("#no-comments");
             }

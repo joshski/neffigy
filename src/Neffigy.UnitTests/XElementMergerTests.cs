@@ -9,7 +9,7 @@ namespace Neffigy.UnitTests
         [Test]
         public void MergesXElementsById()
         {
-            var merger = new OverwriteIdsMerger();
+            var merger = new IdMatchingXElementMerger();
             var master = XElement.Parse("<a><b id=\"x\">foo</b><c /></a>");
             var child = XElement.Parse("<a><k id=\"x\">foo</k></a>");
             var merged = merger.Merge(master, child);

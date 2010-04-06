@@ -3,7 +3,7 @@ using System.Xml.XPath;
 
 namespace Neffigy
 {
-    public class OverwriteIdsMerger : XElementMerger
+    public class IdMatchingXElementMerger : XElementMerger
     {
         public XElement Merge(XElement masterElement, XNode sourceElement)
         {
