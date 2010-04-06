@@ -7,7 +7,7 @@ _ReSharper.*
 *.csproj.user
 *.resharper.user
 *.resharper
-*.suo
+**/*.suo
 *.cache
 ~$*
 Visual Studio 2008
